@@ -35,7 +35,11 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
         }
         btnNewProduct.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
-                ?.apply { replace(R.id.flFragment, NewProductFragment()); commit() }
+                ?.apply {
+                    replace(R.id.flFragment, NewProductFragment())
+                    addToBackStack(null)
+                    commit()
+                }
         }
     }
 
@@ -55,15 +59,10 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
 
             init {
                 itemView.btnDelete.setOnClickListener {
-                    AlertDialog.Builder(context)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Borrar Producto")
-                        .setMessage("¿Está seguro que desea borrar este producto?")
+                    AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Borrar Producto").setMessage("¿Está seguro que desea borrar este producto?")
                         .setPositiveButton("Si") { _, _ -> storeModel.removeProduct(product!!) }
-                        .setNegativeButton("No", null)
-                        .show()
-
-                    Log.i("ProductListActivity", "Click  delete")
+                        .setNegativeButton("No", null).show()
                 }
             }
 
