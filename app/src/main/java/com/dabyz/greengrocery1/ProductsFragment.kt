@@ -77,9 +77,9 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
             fun setData(product: StoreModel.Product?, pos: Int) {
                 this.product = product
                 product?.let {
-                    itemView.txvTitle.text = product.title
-                    itemView.txvTitle2.text = product.title2
-                    itemView.txvPrice.text = product.price.toString()
+                    itemView.etTitle.text = product.title
+                    itemView.etTitle2.text = product.title2
+                    itemView.etPrice.text = product.price.toString()
                     Glide.with(activity).load(product.photo).into(itemView.imgProduct)
                 }
 

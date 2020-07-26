@@ -45,7 +45,7 @@
             card_view:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/txvTitle"
+                android:id="@+id/etTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -55,7 +55,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/txvTitle2"
+                android:id="@+id/etTitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -65,7 +65,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/txvPrice"
+                android:id="@+id/etPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -75,7 +75,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/txvStock"
+                android:id="@+id/etStock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

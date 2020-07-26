@@ -34,28 +34,28 @@
         app:layout_constraintStart_toEndOf="@+id/linearLayout1"
         app:layout_constraintTop_toTopOf="parent">
         <TextView
-            android:id="@+id/txvTitle"
+            android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textSize="18sp"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/txvTitle2"
+            android:id="@+id/etTitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textSize="18sp"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/txvPrice"
+            android:id="@+id/etPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textSize="18sp"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/txvStock"
+            android:id="@+id/etStock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
