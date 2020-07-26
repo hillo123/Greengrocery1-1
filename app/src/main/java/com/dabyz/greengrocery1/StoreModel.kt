@@ -45,7 +45,7 @@ class StoreModel : ViewModel() {
 
     private suspend fun savePhoto(compressImg: ByteArray): String =
         suspendCoroutine { cont ->
-            val ref = FirebaseStorage.getInstance().reference.child(selectedKey + "/edu.JPEG")
+            val ref = FirebaseStorage.getInstance().reference.child(selectedKey + "/" + System.currentTimeMillis() + ".JPEG")
             ref.putBytes(compressImg).addOnCompleteListener {
                 ref.downloadUrl.addOnCompleteListener() { cont.resume(it.result.toString()) }
             }
