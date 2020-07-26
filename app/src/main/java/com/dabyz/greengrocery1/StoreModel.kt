@@ -8,9 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -20,8 +18,8 @@ class StoreModel : ViewModel() {
     data class Business(var id: String = "", var address: String = "", var refs: ArrayList<Product> = ArrayList())
 
     private val dbBusiness = FirebaseFirestore.getInstance().collection("fruterias")
-
     private val selectedKey = "F0mnF9YEACQwXl6exoFj" // TODO: load from local storage
+
     val selectedBusiness = MutableLiveData<Business>()
 
     init {
@@ -53,11 +51,9 @@ class StoreModel : ViewModel() {
             }
         }
 
-
     fun updateProduct(product: Product) {
         //dbBusiness.document(selectedKey)
     }
-
 
     fun saveBusiness(business: Business) {
         // TODO: 21/06/2020 save a new business to fire-storage and local storage
@@ -89,5 +85,4 @@ class StoreModel : ViewModel() {
                 Log.w("Model.addFruteria", "Error adding document", e)
             }
     }
-
 }
