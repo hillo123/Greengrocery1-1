@@ -5,11 +5,13 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_signup.*
 
 
 class SignUpFragment : Fragment(R.layout.fragment_signup) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.txFragmentTitle?.text ="Nueva Tienda"
         btnSignUp.setOnClickListener {
             //TODO("Form validations and save in firebase")
             activity?.getSharedPreferences("dabyzPref", Context.MODE_PRIVATE)?.edit()

@@ -15,12 +15,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
 
 class ProductsFragment : Fragment(R.layout.fragment_products) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.txFragmentTitle?.text = "Lista de Productos"
         val storeModel = ViewModelProvider(this).get(StoreModel::class.java)
         var productsAdapter = ProductsListAdapter(activity as Context, storeModel)
         recyclerView.apply {

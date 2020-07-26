@@ -6,29 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.dabyz.greengrocery1.SignUpFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/txNew"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nueva Tienda"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="Nombre de la Tienda"
         android:inputType="textPersonName"
         android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txNew" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etMail"
@@ -91,8 +79,10 @@
         android:id="@+id/txLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tienda ya Registrada"
+        android:text="Para una Tienda ya Registrada"
         android:textSize="30dp"
+        android:textStyle="bold|italic"
+        android:textAlignment="center"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
