@@ -1,8 +1,6 @@
 package com.dabyz.greengrocery1
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +22,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.txFragmentTitle?.text = "Lista de Productos"
         val storeModel = ViewModelProvider(this).get(StoreModel::class.java)
-        var productsAdapter = ProductsListAdapter(activity as Context, storeModel)
+        var productsAdapter = ProductsListAdapter(activity as MainActivity, storeModel)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = productsAdapter
@@ -45,11 +43,11 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
         }
     }
 
-    class ProductsListAdapter(val context: Context, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
+    class ProductsListAdapter(val activity: MainActivity, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
         var products = listOf<StoreModel.Product>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsListAdapter.ItemHolder =
-            ItemHolder(LayoutInflater.from(context).inflate(R.layout.card_product, parent, false))
+            ItemHolder(LayoutInflater.from(activity).inflate(R.layout.card_product, parent, false))
 
         override fun getItemCount(): Int = products.size
 
@@ -61,10 +59,18 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
 
             init {
                 itemView.btnDelete.setOnClickListener {
-                    AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                    AlertDialog.Builder(activity).setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Borrar Producto").setMessage("¿Está seguro que desea borrar este producto?")
                         .setPositiveButton("Si") { _, _ -> storeModel.removeProduct(product!!) }
                         .setNegativeButton("No", null).show()
+                }
+                itemView.setOnClickListener {
+                    activity.supportFragmentManager.beginTransaction()
+                        ?.apply {
+                            replace(R.id.flFragment, EditProductFragment())
+                            addToBackStack(null)
+                            commit()
+                        }
                 }
             }
 
@@ -74,7 +80,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
                     itemView.txvTitle.text = product.title
                     itemView.txvTitle2.text = product.title2
                     itemView.txvPrice.text = product.price.toString()
-                    Glide.with(context).load(product.photo).into(itemView.imgProduct)
+                    Glide.with(activity).load(product.photo).into(itemView.imgProduct)
                 }
 
             }
