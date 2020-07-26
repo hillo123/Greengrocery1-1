@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_product.*
 
-class NewProductFragment : Fragment(R.layout.fragment_product) {
+class NewProductFragment : Fragment(R.layout.fragment_new_product) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.txFragmentTitle?.text = "Nuevo Producto"
         btnCancel.setOnClickListener {
