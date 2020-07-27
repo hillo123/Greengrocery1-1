@@ -12,14 +12,12 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+data class Product(var title: String = "", var title2: String = "", var price: Long = 0, var photo: String = "")
+data class Business(var id: String = "", var address: String = "", var refs: ArrayList<Product> = ArrayList())
+
 class StoreModel : ViewModel() {
-
-    data class Product(var title: String = "", var title2: String = "", var price: Long = 0, var photo: String = "")
-    data class Business(var id: String = "", var address: String = "", var refs: ArrayList<Product> = ArrayList())
-
     private val dbBusiness = FirebaseFirestore.getInstance().collection("fruterias")
     private val selectedKey = "F0mnF9YEACQwXl6exoFj" // TODO: load from local storage
-
     val selectedBusiness = MutableLiveData<Business>()
 
     init {

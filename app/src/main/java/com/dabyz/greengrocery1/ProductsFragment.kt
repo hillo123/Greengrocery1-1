@@ -44,7 +44,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
     }
 
     class ProductsListAdapter(val activity: MainActivity, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
-        var products = listOf<StoreModel.Product>()
+        var products = listOf<Product>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsListAdapter.ItemHolder =
             ItemHolder(LayoutInflater.from(activity).inflate(R.layout.card_product, parent, false))
@@ -55,7 +55,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
             holder.setData(products[position], position)
 
         inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private var product: StoreModel.Product? = null
+            private var product: Product? = null
 
             init {
                 itemView.btnDelete.setOnClickListener {
@@ -74,7 +74,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
                 }
             }
 
-            fun setData(product: StoreModel.Product?, pos: Int) {
+            fun setData(product: Product?, pos: Int) {
                 this.product = product
                 product?.let {
                     itemView.etTitle.text = product.title

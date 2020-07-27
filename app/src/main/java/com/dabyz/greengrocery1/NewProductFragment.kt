@@ -2,7 +2,6 @@ package com.dabyz.greengrocery1
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,7 +18,7 @@ class NewProductFragment : Fragment(R.layout.fragment_new_product) {
         btnOk.setOnClickListener {
             main.compressImg?.let {
                 storeModel.addProduct(
-                    StoreModel.Product(
+                    Product(
                         include.etTitle.text.toString(), etTitle2.text.toString(),
                         etPrice.text.toString().toLong(), ""
                     ), main.compressImg!!
