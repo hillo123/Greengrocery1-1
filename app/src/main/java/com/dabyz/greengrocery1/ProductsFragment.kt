@@ -58,12 +58,6 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
             private var product: Product? = null
 
             init {
-                itemView.btnDelete.setOnClickListener {
-                    AlertDialog.Builder(activity).setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Borrar Producto").setMessage("¿Está seguro que desea borrar este producto?")
-                        .setPositiveButton("Si") { _, _ -> storeModel.removeProduct(product!!) }
-                        .setNegativeButton("No", null).show()
-                }
                 itemView.setOnClickListener {
                     activity.supportFragmentManager.beginTransaction()
                         ?.apply {
@@ -74,12 +68,12 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
             }
 
             fun setData(product: Product?, pos: Int) {
-                this.product = product
-                product?.let {
-                    itemView.etTitle.text = product.title
-                    itemView.etTitle2.text = product.title2
-                    itemView.etPrice.text = product.price.toString()
-                    Glide.with(activity).load(product.photo).into(itemView.imgProduct)
+                this.product = product as Product
+                product.apply {
+                    itemView.etTitle.text = title
+                    itemView.etTitle2.text = title2
+                    itemView.etPrice.text = price.toString()
+                    Glide.with(activity).load(photo).into(itemView.imgProduct)
                 }
 
             }
