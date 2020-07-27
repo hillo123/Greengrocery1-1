@@ -67,9 +67,8 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
                 itemView.setOnClickListener {
                     activity.supportFragmentManager.beginTransaction()
                         ?.apply {
-                            replace(R.id.flFragment, EditProductFragment())
-                            addToBackStack(null)
-                            commit()
+                            replace(R.id.flFragment, EditProductFragment(product!!))
+                            addToBackStack(null); commit()
                         }
                 }
             }
