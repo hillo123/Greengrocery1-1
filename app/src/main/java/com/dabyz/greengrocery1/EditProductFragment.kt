@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_product.*
 
-class EditProductFragment(val product: Product) : Fragment(R.layout.fragment_product) {
+class EditProductFragment(private val product: Product) : Fragment(R.layout.fragment_product) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.txFragmentTitle?.text = "Edición de Producto"
         product?.let {
