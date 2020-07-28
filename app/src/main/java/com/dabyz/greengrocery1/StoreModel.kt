@@ -12,11 +12,12 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-data class Product(var title: String = "", var title2: String = "", var price: Long = 0, var photo: String = "")
+data class Product(var title: String = "", var title2: String = "", var price: Long = 0, var photo: String = "", var fileName: String = "")
 data class Business(var id: String = "", var address: String = "", var refs: ArrayList<Product> = ArrayList())
 
 class StoreModel : ViewModel() {
     private val dbBusiness = FirebaseFirestore.getInstance().collection("fruterias")
+    private val fbStorage by lazy { FirebaseStorage.getInstance().reference }
     private val selectedKey = "F0mnF9YEACQwXl6exoFj" // TODO: load from local storage
     val selectedBusiness = MutableLiveData<Business>()
 
@@ -35,22 +36,38 @@ class StoreModel : ViewModel() {
         }
 
     fun addProduct(product: Product, compressImg: ByteArray) = CoroutineScope(IO).launch {
-        product.photo = savePhoto(compressImg)
+        product.fileName = "" + System.currentTimeMillis()
+        product.photo = savePhoto(compressImg, product.fileName)
         dbBusiness.document(selectedKey).update("refs", FieldValue.arrayUnion(product))
     }
 
-    fun removeProduct(product: Product) = dbBusiness.document(selectedKey).update("refs", FieldValue.arrayRemove(product))
+    fun updateProduct(product: Product, compressImg: ByteArray?, oldProduct: Product) = CoroutineScope(IO).launch {
+        if (compressImg != null) {
+            product.fileName = "" + System.currentTimeMillis()
+            product.photo = savePhoto(compressImg, product.fileName)
+            fbStorage.child(selectedKey + "/" + oldProduct.fileName + ".JPEG").delete()
+                .addOnFailureListener { Log.e("StoreModel", "file " + selectedKey + "/" + product.fileName + ".JPEG deleted error", it) }
+        } else {
+            product.fileName = oldProduct.fileName
+            product.photo = oldProduct.photo
+        }
+        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayUnion(product))
+        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayRemove(oldProduct))
+            .addOnFailureListener { Log.e("StoreModel", "$oldProduct deleted error", it) }
+    }
 
-    private suspend fun savePhoto(compressImg: ByteArray): String =
+    private suspend fun savePhoto(compressImg: ByteArray, fileName: String): String =
         suspendCoroutine { cont ->
-            val ref = FirebaseStorage.getInstance().reference.child(selectedKey + "/" + System.currentTimeMillis() + ".JPEG")
+            val ref = fbStorage.child("$selectedKey/$fileName.JPEG")
             ref.putBytes(compressImg).addOnCompleteListener {
                 ref.downloadUrl.addOnCompleteListener() { cont.resume(it.result.toString()) }
             }
         }
 
-    fun updateProduct(product: Product) {
-        //dbBusiness.document(selectedKey)
+    fun removeProduct(product: Product) {
+        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayRemove(product))
+        fbStorage.child(selectedKey + "/" + product.fileName + ".JPEG").delete()
+            .addOnFailureListener { Log.e("StoreModel", "file " + selectedKey + "/" + product.fileName + ".JPEG deleted ok", it) }
     }
 
     fun saveBusiness(business: Business) {
