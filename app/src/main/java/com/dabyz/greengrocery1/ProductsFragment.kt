@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,24 +15,24 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
 
-class ProductsFragment : Fragment(R.layout.fragment_products) {
-
+class ProductsFragment(private val mail: String?) : Fragment(R.layout.fragment_products) {
+    private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activity?.txFragmentTitle?.text = "Lista de Productos"
-        val storeModel = ViewModelProvider(this).get(StoreModel::class.java)
-        var productsAdapter = ProductsListAdapter(activity as MainActivity, storeModel)
+        main.txFragmentTitle.text = "Lista de Productos"
+        mail?.let { main.storeModel.init(mail) }
+        var productsAdapter = ProductsListAdapter(main, main.storeModel)
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(main)
             adapter = productsAdapter
         }
-        storeModel.selectedBusiness.observe(activity as LifecycleOwner, Observer {
+        main.storeModel.selectedBusiness.observe(main as LifecycleOwner, Observer {
             productsAdapter.apply { products = it.refs; notifyDataSetChanged() }
         })
         btnOrders.setOnClickListener {
             Toast.makeText(context, "Orders not implemented yet", Toast.LENGTH_SHORT).show()
         }
         btnNewProduct.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
+            main.supportFragmentManager?.beginTransaction()
                 ?.apply {
                     replace(R.id.flFragment, NewProductFragment())
                     addToBackStack(null)
@@ -43,11 +41,11 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
         }
     }
 
-    class ProductsListAdapter(val activity: MainActivity, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
+    class ProductsListAdapter(val main: MainActivity, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
         var products = listOf<Product>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsListAdapter.ItemHolder =
-            ItemHolder(LayoutInflater.from(activity).inflate(R.layout.card_product, parent, false))
+            ItemHolder(LayoutInflater.from(main).inflate(R.layout.card_product, parent, false))
 
         override fun getItemCount(): Int = products.size
 
@@ -59,7 +57,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
 
             init {
                 itemView.setOnClickListener {
-                    activity.supportFragmentManager.beginTransaction()
+                    main.supportFragmentManager.beginTransaction()
                         ?.apply {
                             replace(R.id.flFragment, EditProductFragment(product!!))
                             addToBackStack(null); commit()
@@ -73,7 +71,7 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
                     itemView.etTitle.text = title
                     itemView.etTitle2.text = title2
                     itemView.etPrice.text = price.toString()
-                    Glide.with(activity).load(photo).into(itemView.imgProduct)
+                    Glide.with(main).load(photo).into(itemView.imgProduct)
                 }
 
             }

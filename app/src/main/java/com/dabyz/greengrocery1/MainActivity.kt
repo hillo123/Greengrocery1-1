@@ -14,17 +14,31 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.ByteArrayOutputStream
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
-
-    private var imageView4Camera: ImageView? = null
     private val CAMERA_ACTIVITY_REQUEST_CODE = 1
+    private var imageView4Camera: ImageView? = null
     private var imageUri: Uri? = null
     var compressImg: ByteArray? = null
+    val storeModel by lazy { ViewModelProvider(this).get(StoreModel::class.java) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState); setContentView(R.layout.activity_main)
+        requestPermissions()
+        supportFragmentManager.beginTransaction().apply {
+            val mail = getSharedPreferences("dabyz.greengrocery", Context.MODE_PRIVATE).getString("mail", null)
+            if (mail == null)
+                replace(R.id.flFragment, SignUpFragment())
+            else
+                replace(R.id.flFragment, ProductsFragment(mail))
+            commit()
+        }
+    }
 
     fun openCamera(imageView4Camera: ImageView) {
         this.imageView4Camera = imageView4Camera
@@ -60,19 +74,6 @@ class MainActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) imageUri?.let {
                     CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(300, 300).start(this)
                 }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        requestPermissions()
-        supportFragmentManager.beginTransaction().apply {
-            if (getSharedPreferences("dabyzPref", Context.MODE_PRIVATE).getString("mail", null) == null)
-                replace(R.id.flFragment, SignUpFragment())
-            else
-                replace(R.id.flFragment, ProductsFragment())
-            commit()
         }
     }
 

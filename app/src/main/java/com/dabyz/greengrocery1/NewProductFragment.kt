@@ -11,9 +11,9 @@ import kotlinx.android.synthetic.main.card_edit_product.view.*
 import kotlinx.android.synthetic.main.fragment_product.*
 
 class NewProductFragment : Fragment(R.layout.fragment_new_product) {
+    private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val main = activity as MainActivity
-        val storeModel = ViewModelProvider(this).get(StoreModel::class.java)
+        val storeModel = main.storeModel
         main.txFragmentTitle.text = "Nuevo Producto"
         btnCancel.setOnClickListener { main.supportFragmentManager.popBackStack() }
         btnOk.setOnClickListener {

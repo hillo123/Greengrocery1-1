@@ -9,23 +9,24 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 data class Product(var title: String = "", var title2: String = "", var price: Long = 0, var photo: String = "", var fileName: String = "")
-data class Business(var id: String = "", var address: String = "", var refs: ArrayList<Product> = ArrayList())
+data class Business(
+    var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
+    var refs: ArrayList<Product> = ArrayList()
+)
 
 class StoreModel : ViewModel() {
-    private val dbBusiness = FirebaseFirestore.getInstance().collection("fruterias")
+    private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
     private val fbStorage by lazy { FirebaseStorage.getInstance().reference }
-    private val selectedKey = "F0mnF9YEACQwXl6exoFj" // TODO: load from local storage
+    private var selectedKey = "" // TODO: load from local storage
     val selectedBusiness = MutableLiveData<Business>()
 
-    init {
-        fetchStore(selectedKey)
-    }
-
-    private fun fetchStore(selectedKey: String) =
+    fun init(selectedKey: String) {
+        this.selectedKey = selectedKey
         dbBusiness.document(selectedKey).addSnapshotListener { snapshot, e ->
             e?.let { Log.w("Model", "Listen failed.", e); return@addSnapshotListener }
             if (snapshot != null && snapshot.exists()) {
@@ -34,6 +35,7 @@ class StoreModel : ViewModel() {
                 Log.d("Model", "Current data: null")
             }
         }
+    }
 
     fun addProduct(product: Product, compressImg: ByteArray) = CoroutineScope(IO).launch {
         product.fileName = "" + System.currentTimeMillis()
@@ -99,5 +101,10 @@ class StoreModel : ViewModel() {
             .addOnFailureListener { e ->
                 Log.w("Model.addFruteria", "Error adding document", e)
             }
+    }
+
+    fun addBusiness(business: Business) = runBlocking {
+        dbBusiness.document(business.mail).set(business)
+        init(business.mail)
     }
 }
