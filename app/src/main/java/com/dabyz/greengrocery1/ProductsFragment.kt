@@ -15,11 +15,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
 
-class ProductsFragment(private val mail: String?) : Fragment(R.layout.fragment_products) {
+class ProductsFragment(private val mail: String) : Fragment(R.layout.fragment_products) {
     private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         main.txFragmentTitle.text = "Lista de Productos"
-        mail?.let { main.storeModel.init(mail) }
+        main.storeModel.init(mail)
         var productsAdapter = ProductsListAdapter(main, main.storeModel)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(main)

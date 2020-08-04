@@ -22,12 +22,12 @@ data class Business(
 class StoreModel : ViewModel() {
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
     private val fbStorage by lazy { FirebaseStorage.getInstance().reference }
-    private var selectedKey = "" // TODO: load from local storage
+    private var mail = "" // TODO: load from local storage
     val selectedBusiness = MutableLiveData<Business>()
 
-    fun init(selectedKey: String) {
-        this.selectedKey = selectedKey
-        dbBusiness.document(selectedKey).addSnapshotListener { snapshot, e ->
+    fun init(mail: String) {
+        this.mail = mail
+        dbBusiness.document(mail).addSnapshotListener { snapshot, e ->
             e?.let { Log.w("Model", "Listen failed.", e); return@addSnapshotListener }
             if (snapshot != null && snapshot.exists()) {
                 selectedBusiness.value = snapshot.toObject(Business::class.java)
@@ -40,36 +40,36 @@ class StoreModel : ViewModel() {
     fun addProduct(product: Product, compressImg: ByteArray) = CoroutineScope(IO).launch {
         product.fileName = "" + System.currentTimeMillis()
         product.photo = savePhoto(compressImg, product.fileName)
-        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayUnion(product))
+        dbBusiness.document(mail).update("refs", FieldValue.arrayUnion(product))
     }
 
     fun updateProduct(product: Product, compressImg: ByteArray?, oldProduct: Product) = CoroutineScope(IO).launch {
         if (compressImg != null) {
             product.fileName = "" + System.currentTimeMillis()
             product.photo = savePhoto(compressImg, product.fileName)
-            fbStorage.child(selectedKey + "/" + oldProduct.fileName + ".JPEG").delete()
-                .addOnFailureListener { Log.e("StoreModel", "file " + selectedKey + "/" + product.fileName + ".JPEG deleted error", it) }
+            fbStorage.child(mail + "/" + oldProduct.fileName + ".JPEG").delete()
+                .addOnFailureListener { Log.e("StoreModel", "file " + mail + "/" + product.fileName + ".JPEG deleted error", it) }
         } else {
             product.fileName = oldProduct.fileName
             product.photo = oldProduct.photo
         }
-        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayUnion(product))
-        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayRemove(oldProduct))
+        dbBusiness.document(mail).update("refs", FieldValue.arrayUnion(product))
+        dbBusiness.document(mail).update("refs", FieldValue.arrayRemove(oldProduct))
             .addOnFailureListener { Log.e("StoreModel", "$oldProduct deleted error", it) }
     }
 
     private suspend fun savePhoto(compressImg: ByteArray, fileName: String): String =
         suspendCoroutine { cont ->
-            val ref = fbStorage.child("$selectedKey/$fileName.JPEG")
+            val ref = fbStorage.child("$mail/$fileName.JPEG")
             ref.putBytes(compressImg).addOnCompleteListener {
                 ref.downloadUrl.addOnCompleteListener() { cont.resume(it.result.toString()) }
             }
         }
 
     fun removeProduct(product: Product) {
-        dbBusiness.document(selectedKey).update("refs", FieldValue.arrayRemove(product))
-        fbStorage.child(selectedKey + "/" + product.fileName + ".JPEG").delete()
-            .addOnFailureListener { Log.e("StoreModel", "file " + selectedKey + "/" + product.fileName + ".JPEG deleted ok", it) }
+        dbBusiness.document(mail).update("refs", FieldValue.arrayRemove(product))
+        fbStorage.child(mail + "/" + product.fileName + ".JPEG").delete()
+            .addOnFailureListener { Log.e("StoreModel", "file " + mail + "/" + product.fileName + ".JPEG deleted ok", it) }
     }
 
     fun saveBusiness(business: Business) {
@@ -105,6 +105,5 @@ class StoreModel : ViewModel() {
 
     fun addBusiness(business: Business) = runBlocking {
         dbBusiness.document(business.mail).set(business)
-        init(business.mail)
     }
 }
