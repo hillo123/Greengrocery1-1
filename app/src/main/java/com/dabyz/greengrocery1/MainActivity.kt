@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 0 && grantResults.filterNot { it == PackageManager.PERMISSION_GRANTED }.isNotEmpty())
             exitProcess(0)
+        //TODO check if it works ok
     }
 
 }
