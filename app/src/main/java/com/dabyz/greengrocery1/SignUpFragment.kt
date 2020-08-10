@@ -15,7 +15,7 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
         main.txFragmentTitle.text = "Nueva Tienda"
         btnSignUp.setOnClickListener {
             //TODO("Form validations and save in firebase")
-            main.getSharedPreferences("dabyz.greengrocery", Context.MODE_PRIVATE)?.edit()
+            main.getSharedPreferences("dabyz.greengrocery", Context.MODE_PRIVATE).edit()
                 ?.apply { putString("mail", etMail.text.toString()); commit() }
             main.storeModel.addBusiness(
                 Business(
