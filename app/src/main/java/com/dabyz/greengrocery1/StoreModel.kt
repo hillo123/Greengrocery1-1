@@ -72,37 +72,6 @@ class StoreModel : ViewModel() {
             .addOnFailureListener { Log.e("StoreModel", "file " + mail + "/" + product.fileName + ".JPEG deleted ok", it) }
     }
 
-    fun saveBusiness(business: Business) {
-        // TODO: 21/06/2020 save a new business to fire-storage and local storage
-        //dbBusiness.document(selectedKey).
-    }
-
-    fun addFruteria() {
-        val fruteria = hashMapOf(
-            "Id" to 2,
-            "address" to "https://www.google.com.ar/maps/place/Los+Chicos/@40.4335005,-3.6740017,20.25z/data=!4m8!1m2!2m1!1sfruteria!3m4!1s0x0:0x5f7f04c62279cc82!8m2!3d40.4335821!4d-3.6740694",
-            "refs" to listOf(
-                hashMapOf(
-                    "photo" to "https://prod-mercadona.imgix.net/images/53687de52a3b197dc1d7c3417d693ef8.jpg?fit=crop&h=300&w=300",
-                    "price" to 33,
-                    "title" to "Manzana golden2",
-                    "title2" to "Pieza 210 g aprox."
-                )
-            )
-        )
-        FirebaseFirestore.getInstance().collection("fruterias")
-            .add(fruteria)
-            .addOnSuccessListener { documentReference ->
-                Log.d(
-                    "Model.addFruteria",
-                    "DocumentSnapshot added with ID: ${documentReference.id}"
-                )
-            }
-            .addOnFailureListener { e ->
-                Log.w("Model.addFruteria", "Error adding document", e)
-            }
-    }
-
     fun addBusiness(business: Business) = runBlocking {
         dbBusiness.document(business.mail).set(business)
     }
